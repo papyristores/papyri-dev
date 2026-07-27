@@ -1,0 +1,582 @@
+.page {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  /* background-color: #202124; */
+    background-color: #FFFFFF;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.05) 35%,
+    rgba(0, 0, 0, 0.05) 60%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: clamp(96px, 32vh, 340px);
+  padding-inline: 16px;
+}
+
+.search-bar {
+  width: min(90vw, 584px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 0 12px 0 20px;
+  height: 46px;
+  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+  transition: box-shadow 0.2s ease;
+}
+
+.search-bar:focus-within {
+  box-shadow: 0 2px 10px rgba(32, 33, 36, 0.4);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: #202124;
+  min-width: 0;
+  height: 100%;
+}
+
+.search-input::placeholder {
+  color: #80868b;
+}
+
+.icon-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  background: rgba(32, 33, 36, 0.08);
+}
+
+.clear-btn {
+  color: #5f6368;
+}
+
+.search-icon-btn {
+  color: #4285f4;
+}
+
+.search-icon-btn:hover,
+.search-icon-btn:focus-visible {
+  background: rgba(66, 133, 244, 0.1);
+}
+
+.link-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  width: min(92vw, 900px);
+  margin: 48px auto 64px;
+}
+
+.figma-logo {
+  width: 88px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.link-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+.link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #000000;
+  border: 3px solid #000000;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 #000000;
+  font-family: 'Integral CF Demibold', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  text-align: center;
+  padding: 16px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  width: 10rem;
+}
+
+.link-btn:hover,
+.link-btn:focus-visible {
+  background-color: #f24e1e;
+  color: #ffffff;
+  transform: translateY(-0.33em);
+}
+
+.link-btn:active {
+  transform: translateY(0);
+}
+
+.link-btn.signature-btn {
+  font-family: 'Alessandro Signature', cursive;
+  text-transform: none;
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: 0;
+}
+
+.sheet-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  width: min(92vw, 900px);
+  margin: 0 auto 64px;
+}
+
+.spreadsheet-logo {
+  width: 88px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.sheet-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 18px;
+}
+
+.sheet-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0 #000000;
+  padding: 12px 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.sheet-btn:hover,
+.sheet-btn:focus-visible {
+  transform: translateY(-0.33em);
+}
+
+.sheet-btn:active {
+  transform: translateY(0);
+}
+
+.sheet-icon {
+  width: 58%;
+  height: auto;
+}
+
+.sheet-label {
+  font-family: 'Montserrat ExtraLight', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 12px;
+  color: #202124;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.apps-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+  width: min(92vw, 900px);
+  margin: 0 auto 64px;
+}
+
+.notion-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #ffffff;
+  border: 3px solid #000000;
+  border-radius: 24px;
+  box-shadow: 4px 4px 0 #000000;
+  padding: 20px 28px;
+}
+
+.notion-card-logo {
+  width: 84px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.notion-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.notion-list-link {
+  color: #000000;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.notion-list-link:hover,
+.notion-list-link:focus-visible {
+  text-decoration: underline;
+}
+
+.app-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 142px;
+  height: 142px;
+  flex-shrink: 0;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.app-icon-link:hover,
+.app-icon-link:focus-visible {
+  transform: translateY(-4px);
+  opacity: 0.9;
+}
+
+.app-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Uiverse.io by 0xnihilism - OpenAI brutalist button */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.brutalist-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 142px;
+  height: 142px;
+  color: #e5dede;
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.button-1 {
+  background-color: #063525;
+  border: 3px solid #42c498;
+  border-radius: 12px;
+  box-shadow: 4px 4px 1px #000000;
+}
+
+.button-1:hover {
+  background-color: #1a5c46;
+  border-color: #030504;
+  transform: translate(-6px, -6px) rotate(1deg);
+  box-shadow: 10px 10px 0 #000000, 15px 15px 20px rgba(64, 164, 122, 0.2);
+}
+
+.button-1::before,
+.button-1::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: 0.6s;
+}
+
+.button-1::before {
+  left: -100%;
+}
+.button-1::after {
+  left: 100%;
+}
+
+.button-1:hover::before {
+  animation: swipeRight 1.5s infinite;
+}
+.button-1:hover::after {
+  animation: swipeLeft 1.5s infinite;
+}
+
+@keyframes swipeRight {
+  100% {
+    transform: translateX(200%) skew(-45deg);
+  }
+}
+
+@keyframes swipeLeft {
+  100% {
+    transform: translateX(-200%) skew(-45deg);
+  }
+}
+
+.brutalist-button:hover .openai-logo {
+  transform: translateY(-10px);
+}
+
+.brutalist-button:hover .openai-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.openai-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 3;
+}
+
+.openai-icon {
+  width: 64px;
+  height: 64px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.openai-text {
+  font-size: 24px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.button-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+  text-align: center;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 3;
+}
+
+.button-text span:first-child {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.button-text span:last-child {
+  font-size: 16px;
+}
+
+.brutalist-button:hover .button-text,
+.brutalist-button:hover .openai-text {
+  opacity: 1;
+  max-height: 60px;
+  margin-top: 8px;
+}
+
+@keyframes spin-and-zoom {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.brutalist-button:hover .openai-icon {
+  animation: spin-and-zoom 4s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+}
+
+.brutalist-button:hover .openai-text {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.brutalist-button:active .openai-icon,
+.brutalist-button:active .openai-text,
+.brutalist-button:active .button-text {
+  transform: scale(0.95);
+}
+
+@media (max-width: 900px) {
+  .link-panel {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .link-grid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+
+  .sheet-panel {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .sheet-grid {
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+  }
+
+  .apps-panel {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding-top: clamp(72px, 22vh, 220px);
+  }
+
+  .search-bar {
+    width: 92vw;
+    height: 48px;
+    padding: 0 6px 0 16px;
+  }
+
+  .search-input {
+    font-size: 16px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .link-btn {
+    font-size: 13px;
+    padding: 16px 8px;
+    box-shadow: 4px 4px 0 #000;
+    border-width: 2px;
+  }
+
+  .link-btn.signature-btn {
+    font-size: 20px;
+  }
+
+  .figma-logo {
+    width: 64px;
+  }
+
+  .sheet-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .sheet-btn {
+    box-shadow: 4px 4px 0 #000;
+    border-width: 2px;
+    padding: 10px 4px;
+  }
+
+  .sheet-label {
+    font-size: 10px;
+  }
+
+  .spreadsheet-logo {
+    width: 56px;
+  }
+
+  .apps-panel {
+    gap: 20px;
+  }
+
+  .notion-card {
+    padding: 14px 18px;
+    gap: 14px;
+    border-width: 2px;
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  .notion-card-logo {
+    width: 56px;
+  }
+
+  .notion-list-link {
+    font-size: 12px;
+  }
+
+  .app-icon-link,
+  .brutalist-button {
+    width: 100px;
+    height: 100px;
+  }
+}
