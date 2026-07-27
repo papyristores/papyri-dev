@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import './App.css'
 
-const BACKGROUND_IMAGE_URL = '/goku_wallpaper.jpg'
+const BASE_URL = import.meta.env.BASE_URL
+
+const BACKGROUND_IMAGE_URL = `${BASE_URL}goku_wallpaper.jpg`
 
 const FIGMA_TEAM_URL =
   'https://www.figma.com/files/team/1507998345350890059/recents-and-sharing?fuid=1507998343150900536'
@@ -192,7 +194,11 @@ function App() {
             rel="noopener noreferrer"
             aria-label="Open Figma team"
           >
-            <img src="/figma-logo.png" alt="Figma logo" className="figma-logo" />
+            <img
+              src={`${BASE_URL}figma-logo.png`}
+              alt="Figma logo"
+              className="figma-logo"
+            />
           </a>
           <div className="link-grid">
             {LINKS.map((link) => {
@@ -224,7 +230,7 @@ function App() {
             aria-label="Open Google Sheets"
           >
             <img
-              src="/spreadsheet.png"
+              src={`${BASE_URL}spreadsheet.png`}
               alt="Google Sheets"
               className="spreadsheet-logo"
             />
@@ -238,7 +244,11 @@ function App() {
                 rel="noopener noreferrer"
                 className="sheet-btn"
               >
-                <img src="/excel-document.png" alt="" className="sheet-icon" />
+                <img
+                  src={`${BASE_URL}excel-document.png`}
+                  alt=""
+                  className="sheet-icon"
+                />
                 <span className="sheet-label">{sheet.label}</span>
               </a>
             ))}
@@ -254,7 +264,7 @@ function App() {
               aria-label="Open Notion"
             >
               <img
-                src="/notion-logo.png"
+                src={`${BASE_URL}notion-logo.png`}
                 alt="Notion"
                 className="notion-card-logo"
               />
@@ -308,7 +318,11 @@ function App() {
             className="app-icon-link"
             aria-label="Open Pinterest"
           >
-            <img src="/pinterest.png" alt="Pinterest" className="app-icon-img" />
+            <img
+              src={`${BASE_URL}pinterest.png`}
+              alt="Pinterest"
+              className="app-icon-img"
+            />
           </a>
 
           <a
@@ -319,7 +333,7 @@ function App() {
             aria-label="Open Notion Calendar"
           >
             <img
-              src="/notion-calendar.png"
+              src={`${BASE_URL}notion-calendar.png`}
               alt="Notion Calendar"
               className="app-icon-img"
             />
