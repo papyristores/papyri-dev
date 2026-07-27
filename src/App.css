@@ -10,6 +10,102 @@
   overflow-x: hidden;
 }
 
+.gst-widget {
+  position: relative;
+  z-index: 1;
+  width: min(92vw, 900px);
+  margin: 0 auto 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.gst-logo {
+  width: 150px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.gst-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gst-month {
+  font-size: 26px;
+  font-weight: 800;
+  color: #111111;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.gst-toggles {
+  display: flex;
+  gap: 24px;
+}
+
+.gst-toggle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.gst-toggle-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111111;
+  white-space: nowrap;
+}
+
+/* Uiverse.io by vinodjangid07 - toggle switch */
+.gst-toggle-input {
+  display: none;
+}
+
+.gst-toggle-item .toggleSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 50px;
+  height: 30px;
+  background-color: rgb(82, 82, 82);
+  border-radius: 20px;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.gst-toggle-item .toggleSwitch::after {
+  content: '';
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  left: 5px;
+  background-color: transparent;
+  border-radius: 50%;
+  transition-duration: 0.2s;
+  box-shadow: 5px 2px 7px rgba(8, 8, 8, 0.26);
+  border: 5px solid white;
+}
+
+.gst-toggle-input:checked + .toggleSwitch::after {
+  transform: translateX(100%);
+  transition-duration: 0.2s;
+  background-color: white;
+}
+
+.gst-toggle-input:checked + .toggleSwitch {
+  background-color: rgb(148, 118, 255);
+  transition-duration: 0.2s;
+}
+
+.gst-toggle-input:disabled + .toggleSwitch {
+  cursor: not-allowed;
+}
+
 .overlay {
   position: absolute;
   inset: 0;
@@ -29,7 +125,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: clamp(96px, 32vh, 340px);
+  padding-top: clamp(96px, 20vh, 340px);
   padding-inline: 16px;
 }
 
@@ -144,7 +240,8 @@
   transition:
     background-color 0.15s ease,
     color 0.15s ease;
-  width: 10rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .link-btn:hover,
@@ -196,6 +293,7 @@
   justify-content: center;
   gap: 10px;
   aspect-ratio: 1 / 1;
+  min-width: 0;
   background: #ffffff;
   border: 3px solid #000000;
   box-shadow: 4px 4px 0 #000000;
@@ -239,8 +337,8 @@
   z-index: 1;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 32px;
+  flex-wrap: nowrap;
+  gap: 24px;
   width: min(92vw, 900px);
   margin: 0 auto 64px;
 }
@@ -254,6 +352,33 @@
   border-radius: 24px;
   box-shadow: 4px 4px 0 #000000;
   padding: 20px 28px;
+  flex-shrink: 0;
+}
+
+.apps-icon-row {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.apps-icon-row .button-container,
+.apps-icon-row .app-icon-link {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.apps-icon-row .button-container {
+  gap: 0;
+}
+
+.apps-icon-row .button-container .brutalist-button {
+  width: 100%;
+  height: 100%;
 }
 
 .notion-card-logo {
@@ -497,13 +622,62 @@
   }
 
   .apps-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .apps-icon-row {
+    flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .apps-icon-row .button-container,
+  .apps-icon-row .app-icon-link {
+    flex: 0 0 110px;
+    width: 110px;
+    height: 110px;
+    aspect-ratio: auto;
   }
 }
 
 @media (max-width: 600px) {
   .content {
     padding-top: clamp(72px, 22vh, 220px);
+  }
+
+  .gst-widget {
+    gap: 8px;
+  }
+
+  .gst-logo {
+    width: 84px;
+  }
+
+  .gst-month {
+    font-size: 15px;
+  }
+
+  .gst-info {
+    gap: 6px;
+  }
+
+  .gst-toggles {
+    gap: 12px;
+  }
+
+  .gst-toggle-label {
+    font-size: 10px;
+  }
+
+  .gst-toggle-item .toggleSwitch {
+    width: 36px;
+    height: 22px;
+  }
+
+  .gst-toggle-item .toggleSwitch::after {
+    height: 7px;
+    width: 7px;
+    border-width: 4px;
   }
 
   .search-bar {
@@ -574,9 +748,14 @@
     font-size: 12px;
   }
 
-  .app-icon-link,
-  .brutalist-button {
-    width: 100px;
-    height: 100px;
+  .apps-icon-row {
+    gap: 12px;
+  }
+
+  .apps-icon-row .button-container,
+  .apps-icon-row .app-icon-link {
+    flex: 0 0 84px;
+    width: 84px;
+    height: 84px;
   }
 }
