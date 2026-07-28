@@ -235,7 +235,6 @@ function App() {
         <div className="link-panel">
           <a
             href={FIGMA_TEAM_URL}
-            target="_blank"
             rel="noopener noreferrer"
             aria-label="Open Figma team"
           >
@@ -252,7 +251,6 @@ function App() {
                 <a
                   key={link.label}
                   href={link.href}
-                  target="_blank"
                   rel="noopener noreferrer"
                   className={className}
                 >
@@ -270,7 +268,6 @@ function App() {
         <div className="sheet-panel">
           <a
             href={SHEETS_LOGO_URL}
-            target="_blank"
             rel="noopener noreferrer"
             aria-label="Open Google Sheets"
           >
@@ -285,7 +282,6 @@ function App() {
               <a
                 key={sheet.label}
                 href={sheet.href}
-                target="_blank"
                 rel="noopener noreferrer"
                 className="sheet-btn"
               >
@@ -304,7 +300,6 @@ function App() {
           <div className="notion-card">
             <a
               href={NOTION_LOGO_URL}
-              target="_blank"
               rel="noopener noreferrer"
               aria-label="Open Notion"
             >
@@ -319,7 +314,6 @@ function App() {
                 <li key={item.label}>
                   <a
                     href={item.href}
-                    target="_blank"
                     rel="noopener noreferrer"
                     className="notion-list-link"
                   >
@@ -334,7 +328,6 @@ function App() {
             <div className="button-container">
               <a
                 href={OPENAI_URL}
-                target="_blank"
                 rel="noopener noreferrer"
                 className="brutalist-button openai button-1"
               >
@@ -359,7 +352,6 @@ function App() {
 
             <a
               href={PINTEREST_URL}
-              target="_blank"
               rel="noopener noreferrer"
               className="app-icon-link"
               aria-label="Open Pinterest"
@@ -373,7 +365,6 @@ function App() {
 
             <a
               href={TRELLO_URL}
-              target="_blank"
               rel="noopener noreferrer"
               className="app-icon-link"
               aria-label="Open Trello"
@@ -387,7 +378,6 @@ function App() {
 
             <a
               href={AMAZON_URL}
-              target="_blank"
               rel="noopener noreferrer"
               className="app-icon-link"
               aria-label="Open Amazon Seller Central"
@@ -401,7 +391,6 @@ function App() {
 
             <a
               href={GITHUB_URL}
-              target="_blank"
               rel="noopener noreferrer"
               className="app-icon-link"
               aria-label="Open GitHub"
@@ -415,7 +404,6 @@ function App() {
 
             <a
               href={NOTION_CALENDAR_URL}
-              target="_blank"
               rel="noopener noreferrer"
               className="app-icon-link"
               aria-label="Open Notion Calendar"
@@ -432,7 +420,6 @@ function App() {
         <div className="gst-widget">
           <a
             href={GST_URL}
-            target="_blank"
             rel="noopener noreferrer"
             aria-label="Open GST portal"
           >
