@@ -1,10 +1,13 @@
 # papyri-stats-proxy
 
-Cloudflare Worker that lets the dashboard commit updated stat values into
-`public/stats.json` on GitHub. It holds the GitHub token server-side —
-the browser never sees it — and every commit to `main` triggers the
-existing `.github/workflows/deploy-pages.yml`, so the live site picks up
-the new numbers automatically.
+Cloudflare Worker that lets the dashboard commit updated values into
+`public/stats.json` and `public/stalls.json` on GitHub. It holds the GitHub
+token server-side — the browser never sees it — and every commit to `main`
+triggers the existing `.github/workflows/deploy-pages.yml`, so the live
+site picks up the new values automatically.
+
+The frontend POSTs `{ file: "stats.json" | "stalls.json", data: ... }`;
+the Worker validates `data` against that file's shape before committing.
 
 ## One-time setup
 
@@ -49,7 +52,7 @@ the new numbers automatically.
 
 In `src/App.jsx`, set:
 
-- `STATS_API_URL` to `https://papyri-stats-proxy.<your-subdomain>.workers.dev/update-stats`
+- `DASHBOARD_API_URL` to `https://papyri-stats-proxy.<your-subdomain>.workers.dev`
 - `DASHBOARD_EDIT_TOKEN` to the same string you gave `DASHBOARD_TOKEN` in step 3
 
 Then commit and push — the existing GitHub Actions workflow rebuilds and
@@ -60,8 +63,8 @@ redeploys the site with the new values wired in.
 `DASHBOARD_EDIT_TOKEN` ships in the frontend's public source, so anyone
 who reads it can also call this Worker directly. That's an accepted
 trade-off: the token only grants the ability to overwrite
-`public/stats.json` with new numbers (which shows up as a normal commit
-you can revert), never broader GitHub access — the real `GITHUB_TOKEN`
-stays server-side in the Worker and is never exposed. If that's not an
-acceptable risk, add stronger auth (e.g. Cloudflare Access) in front of
-this Worker.
+`public/stats.json` or `public/stalls.json` with new values (which shows
+up as a normal commit you can revert), never broader GitHub access — the
+real `GITHUB_TOKEN` stays server-side in the Worker and is never exposed.
+If that's not an acceptable risk, add stronger auth (e.g. Cloudflare
+Access) in front of this Worker.

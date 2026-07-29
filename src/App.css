@@ -323,19 +323,21 @@
 
 .sheet-mini-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   text-decoration: none;
   cursor: pointer;
 }
 
 .sheet-mini-badge {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 70px;
-  height: 70px;
+  gap: 4px;
+  width: 84px;
+  height: 84px;
+  padding-bottom: 6px;
   border-radius: 50%;
   background: #ffffff;
   border: 2px solid #000000;
@@ -343,23 +345,23 @@
 }
 
 .sheet-mini-icon {
-  width: 40px;
+  width: 32px;
   height: auto;
 }
 
 .sheet-mini-label {
   font-family: 'Montserrat ExtraLight', Arial, sans-serif;
   font-style: normal;
-  font-weight: 200;
-  font-size: 11px;
-  color: #202124;
+  font-weight: 600;
+  font-size: 9px;
+  color: #000000;
   text-transform: uppercase;
   letter-spacing: 0.2px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
+  max-width: 90%;
 }
 
 .sheet-card-logo-cell {
@@ -699,18 +701,18 @@
   cursor: pointer;
 }
 
-.stat-saving {
+.inline-edit-saving {
   font-size: 14px;
   color: #888888;
 }
 
-.stat-edit-row {
+.inline-edit-row {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.stat-value-input {
+.inline-edit-input {
   width: 90px;
   font-family: 'Montserrat SemiBold', Arial, sans-serif;
   font-weight: 600;
@@ -723,7 +725,7 @@
   padding: 2px 0;
 }
 
-.stat-confirm-btn {
+.inline-edit-confirm-btn {
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -737,12 +739,12 @@
   cursor: pointer;
 }
 
-.stat-confirm-btn:hover,
-.stat-confirm-btn:focus-visible {
+.inline-edit-confirm-btn:hover,
+.inline-edit-confirm-btn:focus-visible {
   background: #147a48;
 }
 
-.stat-error {
+.inline-edit-error {
   font-size: 11px;
   color: #c0392b;
   text-align: center;
@@ -777,9 +779,25 @@
   font-weight: 800;
   font-size: 15px;
   color: #111111;
+  cursor: pointer;
 }
 
 .stall-place {
+  font-size: 11px;
+  color: #888888;
+  cursor: pointer;
+}
+
+.stall-date-input {
+  width: 100px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.stall-place-input {
+  width: 90px;
+  font-family: inherit;
+  font-weight: 400;
   font-size: 11px;
   color: #888888;
 }

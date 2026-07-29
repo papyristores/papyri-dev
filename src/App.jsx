@@ -3,12 +3,12 @@ import './App.css'
 
 const BASE_URL = import.meta.env.BASE_URL
 
-// Deployed Cloudflare Worker that commits stats.json back to GitHub.
-// See cloudflare-worker/README.md for deploy instructions.
-const STATS_API_URL = 'https://papyri-stats-proxy.papyri-template.workers.dev'
+// Deployed Cloudflare Worker that commits stats.json/stalls.json back to
+// GitHub. See cloudflare-worker/README.md for deploy instructions.
+const DASHBOARD_API_URL = 'https://papyri-stats-proxy.papyri-template.workers.dev'
 // Shared secret the Worker checks before committing; must match its
-// DASHBOARD_TOKEN secret. Limits writes to stats.json only, not a full
-// GitHub token, but is still visible in this public source — see README.
+// DASHBOARD_TOKEN secret. Limits writes to the dashboard JSON files, not a
+// full GitHub token, but is still visible in this public source — see README.
 const DASHBOARD_EDIT_TOKEN = 'papyristores'
 
 const GST_URL = 'https://www.gst.gov.in/'
@@ -34,6 +34,26 @@ const loadGstState = () => {
     return fresh
   }
   return stored
+}
+
+const commitDashboardFile = async (file, data) => {
+  const res = await fetch(DASHBOARD_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Dashboard-Token': DASHBOARD_EDIT_TOKEN,
+    },
+    body: JSON.stringify({ file, data }),
+  })
+  if (!res.ok) throw new Error('Request failed')
+}
+
+function TickIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+    </svg>
+  )
 }
 
 const FIGMA_TEAM_URL =
@@ -173,13 +193,6 @@ const STATS_META = [
 
 const NEXT_STALL_DATE = 'August 05'
 
-const STALLS = [
-  { date: 'August 05', place: 'Tidal Park' },
-  { date: 'Date', place: 'Place' },
-  { date: 'Date', place: 'Place' },
-  { date: 'Date', place: 'Place' },
-]
-
 function App() {
   const [query, setQuery] = useState('')
   const [gstState, setGstState] = useState(loadGstState)
@@ -191,11 +204,22 @@ function App() {
   const [savingStat, setSavingStat] = useState(null)
   const [statError, setStatError] = useState(null)
 
+  const [stalls, setStalls] = useState(null)
+  const [editingStall, setEditingStall] = useState(null)
+  const [editStallValue, setEditStallValue] = useState('')
+  const [savingStall, setSavingStall] = useState(null)
+  const [stallError, setStallError] = useState(null)
+
   useEffect(() => {
     fetch(`${BASE_URL}stats.json`, { cache: 'no-store' })
       .then((res) => res.json())
       .then(setStats)
       .catch(() => setStatError('Could not load stats.json'))
+
+    fetch(`${BASE_URL}stalls.json`, { cache: 'no-store' })
+      .then((res) => res.json())
+      .then(setStalls)
+      .catch(() => setStallError('Could not load stalls.json'))
   }, [])
 
   const handleGstToggle = (key) => {
@@ -225,15 +249,7 @@ function App() {
     setSavingStat(key)
     setStatError(null)
     try {
-      const res = await fetch(STATS_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Dashboard-Token': DASHBOARD_EDIT_TOKEN,
-        },
-        body: JSON.stringify(nextStats),
-      })
-      if (!res.ok) throw new Error('Request failed')
+      await commitDashboardFile('stats.json', nextStats)
     } catch {
       setStatError(`Failed to save ${key} to GitHub. Value is updated on screen only.`)
     } finally {
@@ -248,6 +264,44 @@ function App() {
     } else if (e.key === 'Escape') {
       e.preventDefault()
       cancelEditingStat()
+    }
+  }
+
+  const startEditingStall = (index, field) => {
+    setStallError(null)
+    setEditingStall({ index, field })
+    setEditStallValue(stalls?.[index]?.[field] ?? '')
+  }
+
+  const cancelEditingStall = () => {
+    setEditingStall(null)
+    setEditStallValue('')
+  }
+
+  const commitStall = async (index, field) => {
+    const nextStalls = stalls.map((stall, i) =>
+      i === index ? { ...stall, [field]: editStallValue } : stall,
+    )
+    setStalls(nextStalls)
+    setEditingStall(null)
+    setSavingStall({ index, field })
+    setStallError(null)
+    try {
+      await commitDashboardFile('stalls.json', nextStalls)
+    } catch {
+      setStallError('Failed to save to GitHub. Value is updated on screen only.')
+    } finally {
+      setSavingStall(null)
+    }
+  }
+
+  const handleStallKeyDown = (e, index, field) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      commitStall(index, field)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      cancelEditingStall()
     }
   }
 
@@ -392,8 +446,8 @@ function App() {
                       alt=""
                       className="sheet-mini-icon"
                     />
+                    <span className="sheet-mini-label">{sheet.label}</span>
                   </span>
-                  <span className="sheet-mini-label">{sheet.label}</span>
                 </a>
               ))}
               <a
@@ -485,10 +539,10 @@ function App() {
             <div className="stat-item" key={stat.key}>
               <span className="stat-label">{stat.label}</span>
               {editingStat === stat.key ? (
-                <span className="stat-edit-row">
+                <span className="inline-edit-row">
                   <input
                     type="text"
-                    className="stat-value-input"
+                    className="inline-edit-input"
                     value={editValue}
                     autoFocus
                     onChange={(e) => setEditValue(e.target.value)}
@@ -497,16 +551,11 @@ function App() {
                   />
                   <button
                     type="button"
-                    className="stat-confirm-btn"
+                    className="inline-edit-confirm-btn"
                     aria-label={`Save ${stat.label}`}
                     onClick={() => commitStat(stat.key)}
                   >
-                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
-                      <path
-                        fill="currentColor"
-                        d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
-                      />
-                    </svg>
+                    <TickIcon />
                   </button>
                 </span>
               ) : (
@@ -516,22 +565,86 @@ function App() {
                   title="Double-click to edit"
                 >
                   {stats?.[stat.key] ?? '–'}
-                  {savingStat === stat.key && <span className="stat-saving"> ⋯</span>}
+                  {savingStat === stat.key && <span className="inline-edit-saving"> ⋯</span>}
                 </span>
               )}
             </div>
           ))}
-          {statError && <span className="stat-error">{statError}</span>}
+          {statError && <span className="inline-edit-error">{statError}</span>}
         </div>
 
         <div className="stalls-card">
           <span className="stalls-title">Stalls</span>
-          {STALLS.map((stall, index) => (
+          {(stalls ?? []).map((stall, index) => (
             <div className="stall-row" key={index}>
-              <span className="stall-date">{stall.date}</span>
-              <span className="stall-place">{stall.place}</span>
+              {editingStall?.index === index && editingStall?.field === 'date' ? (
+                <span className="inline-edit-row">
+                  <input
+                    type="text"
+                    className="inline-edit-input stall-date-input"
+                    value={editStallValue}
+                    autoFocus
+                    onChange={(e) => setEditStallValue(e.target.value)}
+                    onKeyDown={(e) => handleStallKeyDown(e, index, 'date')}
+                    aria-label={`Edit stall ${index + 1} date`}
+                  />
+                  <button
+                    type="button"
+                    className="inline-edit-confirm-btn"
+                    aria-label={`Save stall ${index + 1} date`}
+                    onClick={() => commitStall(index, 'date')}
+                  >
+                    <TickIcon />
+                  </button>
+                </span>
+              ) : (
+                <span
+                  className="stall-date"
+                  onDoubleClick={() => startEditingStall(index, 'date')}
+                  title="Double-click to edit"
+                >
+                  {stall.date}
+                  {savingStall?.index === index && savingStall?.field === 'date' && (
+                    <span className="inline-edit-saving"> ⋯</span>
+                  )}
+                </span>
+              )}
+
+              {editingStall?.index === index && editingStall?.field === 'place' ? (
+                <span className="inline-edit-row">
+                  <input
+                    type="text"
+                    className="inline-edit-input stall-place-input"
+                    value={editStallValue}
+                    autoFocus
+                    onChange={(e) => setEditStallValue(e.target.value)}
+                    onKeyDown={(e) => handleStallKeyDown(e, index, 'place')}
+                    aria-label={`Edit stall ${index + 1} place`}
+                  />
+                  <button
+                    type="button"
+                    className="inline-edit-confirm-btn"
+                    aria-label={`Save stall ${index + 1} place`}
+                    onClick={() => commitStall(index, 'place')}
+                  >
+                    <TickIcon />
+                  </button>
+                </span>
+              ) : (
+                <span
+                  className="stall-place"
+                  onDoubleClick={() => startEditingStall(index, 'place')}
+                  title="Double-click to edit"
+                >
+                  {stall.place}
+                  {savingStall?.index === index && savingStall?.field === 'place' && (
+                    <span className="inline-edit-saving"> ⋯</span>
+                  )}
+                </span>
+              )}
             </div>
           ))}
+          {stallError && <span className="inline-edit-error">{stallError}</span>}
         </div>
 
         <div className="gst-widget">

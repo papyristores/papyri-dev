@@ -6,7 +6,6 @@ compatibility_date = "2024-01-01"
 GITHUB_OWNER = "papyristores"
 GITHUB_REPO = "papyri-dev"
 GITHUB_BRANCH = "main"
-STATS_PATH = "public/stats.json"
 ALLOWED_ORIGIN = "https://papyristores.github.io,http://localhost:5173"
 
 # Secrets (set via `wrangler secret put NAME`, never stored in this file):
