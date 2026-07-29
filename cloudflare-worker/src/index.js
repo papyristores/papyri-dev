@@ -23,6 +23,13 @@ const VALIDATORS = {
     }
     return stalls
   },
+  'gst.json': (data) => {
+    if (typeof data !== 'object' || data === null || Array.isArray(data)) return null
+    const { period, gstr1, gstr3b } = data
+    if (typeof period !== 'string' || !/^\d{4}-\d{2}$/.test(period)) return null
+    if (typeof gstr1 !== 'boolean' || typeof gstr3b !== 'boolean') return null
+    return { period, gstr1, gstr3b }
+  },
 }
 
 export default {

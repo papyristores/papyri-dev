@@ -12,29 +12,12 @@ const DASHBOARD_API_URL = 'https://papyri-stats-proxy.papyri-template.workers.de
 const DASHBOARD_EDIT_TOKEN = 'papyristores'
 
 const GST_URL = 'https://www.gst.gov.in/'
-const GST_STORAGE_KEY = 'gst-return-toggles'
 
 const getPeriodKey = (date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
 
 const getMonthYearLabel = (date) =>
   date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase()
-
-const loadGstState = () => {
-  const currentPeriod = getPeriodKey(new Date())
-  let stored = null
-  try {
-    stored = JSON.parse(localStorage.getItem(GST_STORAGE_KEY))
-  } catch {
-    stored = null
-  }
-  if (!stored || stored.period !== currentPeriod) {
-    const fresh = { period: currentPeriod, gstr1: false, gstr3b: false }
-    localStorage.setItem(GST_STORAGE_KEY, JSON.stringify(fresh))
-    return fresh
-  }
-  return stored
-}
 
 const commitDashboardFile = async (file, data) => {
   const res = await fetch(DASHBOARD_API_URL, {
@@ -195,8 +178,8 @@ const NEXT_STALL_DATE = 'August 05'
 
 function App() {
   const [query, setQuery] = useState('')
-  const [gstState, setGstState] = useState(loadGstState)
   const monthYearLabel = getMonthYearLabel(new Date())
+  const currentPeriod = getPeriodKey(new Date())
 
   const [stats, setStats] = useState(null)
   const [editingStat, setEditingStat] = useState(null)
@@ -210,6 +193,14 @@ function App() {
   const [savingStall, setSavingStall] = useState(null)
   const [stallError, setStallError] = useState(null)
 
+  const [gstData, setGstData] = useState(null)
+  const [gstError, setGstError] = useState(null)
+
+  const gstState =
+    gstData && gstData.period === currentPeriod
+      ? gstData
+      : { period: currentPeriod, gstr1: false, gstr3b: false }
+
   useEffect(() => {
     fetch(`${BASE_URL}stats.json`, { cache: 'no-store' })
       .then((res) => res.json())
@@ -220,15 +211,23 @@ function App() {
       .then((res) => res.json())
       .then(setStalls)
       .catch(() => setStallError('Could not load stalls.json'))
+
+    fetch(`${BASE_URL}gst.json`, { cache: 'no-store' })
+      .then((res) => res.json())
+      .then(setGstData)
+      .catch(() => setGstError('Could not load gst.json'))
   }, [])
 
-  const handleGstToggle = (key) => {
-    setGstState((prev) => {
-      if (prev[key]) return prev
-      const next = { ...prev, [key]: true }
-      localStorage.setItem(GST_STORAGE_KEY, JSON.stringify(next))
-      return next
-    })
+  const handleGstToggle = async (key) => {
+    if (gstState[key]) return
+    const nextState = { ...gstState, [key]: true }
+    setGstData(nextState)
+    setGstError(null)
+    try {
+      await commitDashboardFile('gst.json', nextState)
+    } catch {
+      setGstError('Failed to save to GitHub. Value is updated on screen only.')
+    }
   }
 
   const startEditingStat = (key) => {
@@ -680,6 +679,7 @@ function App() {
               </div>
             </div>
           </div>
+          {gstError && <span className="inline-edit-error">{gstError}</span>}
         </div>
       </aside>
     </div>
