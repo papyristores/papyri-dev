@@ -1,9 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 const BASE_URL = import.meta.env.BASE_URL
 
-const BACKGROUND_IMAGE_URL = `${BASE_URL}wallpaper.png`
+// Deployed Cloudflare Worker that commits stats.json back to GitHub.
+// See cloudflare-worker/README.md for deploy instructions.
+const STATS_API_URL = 'https://papyri-stats-proxy.papyri-template.workers.dev'
+// Shared secret the Worker checks before committing; must match its
+// DASHBOARD_TOKEN secret. Limits writes to stats.json only, not a full
+// GitHub token, but is still visible in this public source — see README.
+const DASHBOARD_EDIT_TOKEN = 'papyristores'
 
 const GST_URL = 'https://www.gst.gov.in/'
 const GST_STORAGE_KEY = 'gst-return-toggles'
@@ -143,11 +149,54 @@ const AMAZON_URL =
   'https://sellercentral.amazon.in/home?mons_sel_mkid=amzn1.mp.o.A21TJRUUN4KGV&mons_sel_dir_mcid=amzn1.merchant.d.ACPD7WVCAVPZLVO3FSECBPBWLYYA&mons_sel_dir_paid=amzn1.pa.d.ABJTW55LWPF2OQREDCLIHFJYAPLQ&ignore_selection_changed=true'
 const GITHUB_URL = 'https://github.com/papyristores?tab=repositories'
 const NOTION_CALENDAR_URL = 'https://calendar.notion.so/'
+const GMAIL_URL = 'https://mail.google.com/'
+
+const QUICK_ICONS = [
+  { label: 'Pinterest', href: PINTEREST_URL, img: 'pinterest.png' },
+  { label: 'Trello', href: TRELLO_URL, img: 'trello.png' },
+  { label: 'Amazon', href: AMAZON_URL, img: 'amazon.png' },
+  { label: 'GitHub', href: GITHUB_URL, img: 'github.png' },
+  { label: 'Gmail', href: GMAIL_URL, img: 'gmail.png' },
+]
+
+const GOAL_ITEMS = [
+  { name: 'Ptah', caption: 'MINOOK 50', img: 'ptah.png', nameImg: 'Ptah-name.png' },
+  { name: 'Ra', caption: 'WEBSITE', img: 'ra.png', nameImg: 'Ra-name.png' },
+  { name: 'Khonsu', caption: 'AUG 1 LAC', img: 'khonsu.png', nameImg: 'Khonsu-name.png' },
+]
+
+const STATS_META = [
+  { key: 'expenditure', label: 'Expenditure' },
+  { key: 'revenue', label: 'Revenue' },
+  { key: 'balance', label: 'Balance' },
+]
+
+const NEXT_STALL_DATE = 'August 05'
+
+const STALLS = [
+  { date: 'August 05', place: 'Tidal Park' },
+  { date: 'Date', place: 'Place' },
+  { date: 'Date', place: 'Place' },
+  { date: 'Date', place: 'Place' },
+]
 
 function App() {
   const [query, setQuery] = useState('')
   const [gstState, setGstState] = useState(loadGstState)
   const monthYearLabel = getMonthYearLabel(new Date())
+
+  const [stats, setStats] = useState(null)
+  const [editingStat, setEditingStat] = useState(null)
+  const [editValue, setEditValue] = useState('')
+  const [savingStat, setSavingStat] = useState(null)
+  const [statError, setStatError] = useState(null)
+
+  useEffect(() => {
+    fetch(`${BASE_URL}stats.json`, { cache: 'no-store' })
+      .then((res) => res.json())
+      .then(setStats)
+      .catch(() => setStatError('Could not load stats.json'))
+  }, [])
 
   const handleGstToggle = (key) => {
     setGstState((prev) => {
@@ -156,6 +205,50 @@ function App() {
       localStorage.setItem(GST_STORAGE_KEY, JSON.stringify(next))
       return next
     })
+  }
+
+  const startEditingStat = (key) => {
+    setStatError(null)
+    setEditingStat(key)
+    setEditValue(stats?.[key] ?? '')
+  }
+
+  const cancelEditingStat = () => {
+    setEditingStat(null)
+    setEditValue('')
+  }
+
+  const commitStat = async (key) => {
+    const nextStats = { ...stats, [key]: editValue }
+    setStats(nextStats)
+    setEditingStat(null)
+    setSavingStat(key)
+    setStatError(null)
+    try {
+      const res = await fetch(STATS_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Dashboard-Token': DASHBOARD_EDIT_TOKEN,
+        },
+        body: JSON.stringify(nextStats),
+      })
+      if (!res.ok) throw new Error('Request failed')
+    } catch {
+      setStatError(`Failed to save ${key} to GitHub. Value is updated on screen only.`)
+    } finally {
+      setSavingStat(null)
+    }
+  }
+
+  const handleStatKeyDown = (e, key) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      commitStat(key)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      cancelEditingStat()
+    }
   }
 
   const runSearch = () => {
@@ -178,153 +271,181 @@ function App() {
 
   const clearQuery = () => setQuery('')
 
-  // style={{ backgroundImage: `url(${BACKGROUND_IMAGE_URL})` }}
   return (
-    <div
-      className="page"
-    >
-      <div className="overlay" />
-
-      <main className="content">
-        <form className="search-bar" onSubmit={handleSubmit} role="search">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search the web"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-            autoFocus
-            aria-label="Search"
+    <div className="dashboard">
+      <aside className="sidebar-left">
+        <a href={FIGMA_TEAM_URL} rel="noopener noreferrer" aria-label="Open Figma team">
+          <img
+            src={`${BASE_URL}figma-logo.png`}
+            alt="Figma logo"
+            className="figma-logo"
           />
-          {query && (
-            <button
-              type="button"
-              className="icon-btn clear-btn"
-              aria-label="Clear search"
-              onClick={clearQuery}
-            >
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        </a>
+        <nav className="sidebar-nav">
+          {LINKS.map((link) => {
+            const className = `link-btn${link.signature ? ' signature-btn' : ''}`
+            return link.href ? (
+              <a key={link.label} href={link.href} rel="noopener noreferrer" className={className}>
+                {link.label}
+              </a>
+            ) : (
+              <button key={link.label} type="button" className={className}>
+                {link.label}
+              </button>
+            )
+          })}
+        </nav>
+      </aside>
+
+      <main className="main-content">
+        <div className="brand-header">
+          <img src={`${BASE_URL}brand.png`} alt="Papyri HQ" className="brand-logo" />
+
+          <form className="search-bar" onSubmit={handleSubmit} role="search">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Google search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              aria-label="Search"
+            />
+            {query && (
+              <button
+                type="button"
+                className="icon-btn clear-btn"
+                aria-label="Clear search"
+                onClick={clearQuery}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+                  <path
+                    fill="currentColor"
+                    d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  />
+                </svg>
+              </button>
+            )}
+            <button type="submit" className="icon-btn search-icon-btn" aria-label="Search">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
                 <path
                   fill="currentColor"
-                  d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"
                 />
               </svg>
             </button>
-          )}
-          <button
-            type="submit"
-            className="icon-btn search-icon-btn"
-            aria-label="Search"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                fill="currentColor"
-                d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"
-              />
-            </svg>
-          </button>
-        </form>
+          </form>
 
-        <div className="link-panel">
-          <a
-            href={FIGMA_TEAM_URL}
-            rel="noopener noreferrer"
-            aria-label="Open Figma team"
-          >
-            <img
-              src={`${BASE_URL}figma-logo.png`}
-              alt="Figma logo"
-              className="figma-logo"
-            />
-          </a>
-          <div className="link-grid">
-            {LINKS.map((link) => {
-              const className = `link-btn${link.signature ? ' signature-btn' : ''}`
-              return link.href ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  rel="noopener noreferrer"
-                  className={className}
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <button key={link.label} type="button" className={className}>
-                  {link.label}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        <div className="sheet-panel">
-          <a
-            href={SHEETS_LOGO_URL}
-            rel="noopener noreferrer"
-            aria-label="Open Google Sheets"
-          >
-            <img
-              src={`${BASE_URL}spreadsheet.png`}
-              alt="Google Sheets"
-              className="spreadsheet-logo"
-            />
-          </a>
-          <div className="sheet-grid">
-            {SHEETS.map((sheet) => (
+          <div className="quick-icons-row">
+            {QUICK_ICONS.map((icon) => (
               <a
-                key={sheet.label}
-                href={sheet.href}
+                key={icon.label}
+                href={icon.href}
                 rel="noopener noreferrer"
-                className="sheet-btn"
+                className="quick-icon-link"
+                aria-label={`Open ${icon.label}`}
               >
-                <img
-                  src={`${BASE_URL}excel-document.png`}
-                  alt=""
-                  className="sheet-icon"
-                />
-                <span className="sheet-label">{sheet.label}</span>
+                <img src={`${BASE_URL}${icon.img}`} alt={icon.label} className="quick-icon-img" />
               </a>
             ))}
           </div>
         </div>
 
-        <div className="apps-panel">
-          <div className="notion-card">
-            <a
-              href={NOTION_LOGO_URL}
-              rel="noopener noreferrer"
-              aria-label="Open Notion"
-            >
+        <div className="goal-card">
+          <div className="goal-label-wrap">
+            <div className="goal-label">
+              Goal of
+              <br />
+              the month
+            </div>
+          </div>
+          {GOAL_ITEMS.map((item) => (
+            <div className="goal-item" key={item.name}>
               <img
-                src={`${BASE_URL}notion-logo.png`}
-                alt="Notion"
-                className="notion-card-logo"
+                src={`${BASE_URL}${item.img}`}
+                alt={item.name}
+                className="goal-photo"
               />
-            </a>
-            <ul className="notion-list">
-              {NOTION_LINKS.map((item) => (
-                <li key={item.label}>
-                  <a
-                    href={item.href}
-                    rel="noopener noreferrer"
-                    className="notion-list-link"
-                  >
-                    {item.label}
-                  </a>
-                </li>
+              <span className="goal-caption">{item.caption}</span>
+              <img
+                src={`${BASE_URL}${item.nameImg}`}
+                alt={item.name}
+                className={`goal-name-img goal-name-${item.name.toLowerCase()}`}
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="content-grid">
+          <div className="sheet-card">
+            <div className="sheet-card-grid">
+              {SHEETS.filter((sheet) => sheet.label !== 'Raw Enquiry').map((sheet) => (
+                <a
+                  key={sheet.label}
+                  href={sheet.href}
+                  rel="noopener noreferrer"
+                  className="sheet-mini-item"
+                >
+                  <span className="sheet-mini-badge">
+                    <img
+                      src={`${BASE_URL}excel-document.png`}
+                      alt=""
+                      className="sheet-mini-icon"
+                    />
+                  </span>
+                  <span className="sheet-mini-label">{sheet.label}</span>
+                </a>
               ))}
-            </ul>
+              <a
+                href={SHEETS_LOGO_URL}
+                rel="noopener noreferrer"
+                aria-label="Open Google Sheets"
+                className="sheet-card-logo-cell"
+              >
+                <img
+                  src={`${BASE_URL}spreadsheet.png`}
+                  alt="Google Sheets"
+                  className="sheet-card-logo"
+                />
+              </a>
+            </div>
           </div>
 
-          <div className="apps-icon-row">
+          <div className="notion-calendar-card">
+            <div className="notion-card-body">
+              <a href={NOTION_LOGO_URL} rel="noopener noreferrer" aria-label="Open Notion">
+                <img
+                  src={`${BASE_URL}notion-logo.png`}
+                  alt="Notion"
+                  className="notion-card-logo"
+                />
+              </a>
+              <ul className="notion-list">
+                {NOTION_LINKS.map((item) => (
+                  <li key={item.label}>
+                    <a href={item.href} rel="noopener noreferrer" className="notion-list-link">
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <a
+              href={NOTION_CALENDAR_URL}
+              rel="noopener noreferrer"
+              className="app-icon-link"
+              aria-label="Open Notion Calendar"
+            >
+              <img
+                src={`${BASE_URL}notion-calendar.png`}
+                alt="Notion Calendar"
+                className="app-icon-img"
+              />
+            </a>
+          </div>
+
+          <div className="bottom-row">
             <div className="button-container">
               <a
                 href={OPENAI_URL}
@@ -350,79 +471,71 @@ function App() {
               </a>
             </div>
 
-            <a
-              href={PINTEREST_URL}
-              rel="noopener noreferrer"
-              className="app-icon-link"
-              aria-label="Open Pinterest"
-            >
-              <img
-                src={`${BASE_URL}pinterest.png`}
-                alt="Pinterest"
-                className="app-icon-img"
-              />
-            </a>
-
-            <a
-              href={TRELLO_URL}
-              rel="noopener noreferrer"
-              className="app-icon-link"
-              aria-label="Open Trello"
-            >
-              <img
-                src={`${BASE_URL}trello.png`}
-                alt="Trello"
-                className="app-icon-img"
-              />
-            </a>
-
-            <a
-              href={AMAZON_URL}
-              rel="noopener noreferrer"
-              className="app-icon-link"
-              aria-label="Open Amazon Seller Central"
-            >
-              <img
-                src={`${BASE_URL}amazon.png`}
-                alt="Amazon"
-                className="app-icon-img"
-              />
-            </a>
-
-            <a
-              href={GITHUB_URL}
-              rel="noopener noreferrer"
-              className="app-icon-link"
-              aria-label="Open GitHub"
-            >
-              <img
-                src={`${BASE_URL}github.png`}
-                alt="GitHub"
-                className="app-icon-img"
-              />
-            </a>
-
-            <a
-              href={NOTION_CALENDAR_URL}
-              rel="noopener noreferrer"
-              className="app-icon-link"
-              aria-label="Open Notion Calendar"
-            >
-              <img
-                src={`${BASE_URL}notion-calendar.png`}
-                alt="Notion Calendar"
-                className="app-icon-img"
-              />
-            </a>
+            <div className="next-stall-card">
+              <span className="next-stall-label">Next Stall on</span>
+              <span className="next-stall-date">{NEXT_STALL_DATE}</span>
+            </div>
           </div>
+        </div>
+      </main>
+
+      <aside className="sidebar-right">
+        <div className="stats-block">
+          {STATS_META.map((stat) => (
+            <div className="stat-item" key={stat.key}>
+              <span className="stat-label">{stat.label}</span>
+              {editingStat === stat.key ? (
+                <span className="stat-edit-row">
+                  <input
+                    type="text"
+                    className="stat-value-input"
+                    value={editValue}
+                    autoFocus
+                    onChange={(e) => setEditValue(e.target.value)}
+                    onKeyDown={(e) => handleStatKeyDown(e, stat.key)}
+                    aria-label={`Edit ${stat.label}`}
+                  />
+                  <button
+                    type="button"
+                    className="stat-confirm-btn"
+                    aria-label={`Save ${stat.label}`}
+                    onClick={() => commitStat(stat.key)}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                      <path
+                        fill="currentColor"
+                        d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              ) : (
+                <span
+                  className="stat-value"
+                  onDoubleClick={() => startEditingStat(stat.key)}
+                  title="Double-click to edit"
+                >
+                  {stats?.[stat.key] ?? '–'}
+                  {savingStat === stat.key && <span className="stat-saving"> ⋯</span>}
+                </span>
+              )}
+            </div>
+          ))}
+          {statError && <span className="stat-error">{statError}</span>}
+        </div>
+
+        <div className="stalls-card">
+          <span className="stalls-title">Stalls</span>
+          {STALLS.map((stall, index) => (
+            <div className="stall-row" key={index}>
+              <span className="stall-date">{stall.date}</span>
+              <span className="stall-place">{stall.place}</span>
+            </div>
+          ))}
         </div>
 
         <div className="gst-widget">
-          <a
-            href={GST_URL}
-            rel="noopener noreferrer"
-            aria-label="Open GST portal"
-          >
+          <a href={GST_URL} rel="noopener noreferrer" aria-label="Open GST portal">
             <img src={`${BASE_URL}gst.png`} alt="GSTIN" className="gst-logo" />
           </a>
           <div className="gst-info">
@@ -455,7 +568,7 @@ function App() {
             </div>
           </div>
         </div>
-      </main>
+      </aside>
     </div>
   )
 }

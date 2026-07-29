@@ -1,219 +1,38 @@
-.page {
-  position: relative;
+.dashboard {
+  display: flex;
+  align-items: stretch;
   min-height: 100dvh;
   width: 100%;
-  /* background-color: #202124; */
-    background-color: #FFFFFF;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: #ffffff;
   overflow-x: hidden;
 }
 
-.gst-widget {
-  position: relative;
-  z-index: 1;
-  width: min(92vw, 900px);
-  margin: 0 auto 48px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-}
+/* Left sidebar */
 
-.gst-logo {
-  width: 150px;
-  height: auto;
+.sidebar-left {
+  width: 220px;
   flex-shrink: 0;
-}
-
-.gst-info {
+  min-height: 100dvh;
+  background: #76d2db;
+  padding: 28px 18px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.gst-month {
-  font-size: 26px;
-  font-weight: 800;
-  color: #111111;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-}
-
-.gst-toggles {
-  display: flex;
+  align-items: center;
   gap: 24px;
 }
 
-.gst-toggle-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.gst-toggle-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #111111;
-  white-space: nowrap;
-}
-
-/* Uiverse.io by vinodjangid07 - toggle switch */
-.gst-toggle-input {
-  display: none;
-}
-
-.gst-toggle-item .toggleSwitch {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 50px;
-  height: 30px;
-  background-color: rgb(82, 82, 82);
-  border-radius: 20px;
-  cursor: pointer;
-  transition-duration: 0.2s;
-}
-
-.gst-toggle-item .toggleSwitch::after {
-  content: '';
-  position: absolute;
-  height: 10px;
-  width: 10px;
-  left: 5px;
-  background-color: transparent;
-  border-radius: 50%;
-  transition-duration: 0.2s;
-  box-shadow: 5px 2px 7px rgba(8, 8, 8, 0.26);
-  border: 5px solid white;
-}
-
-.gst-toggle-input:checked + .toggleSwitch::after {
-  transform: translateX(100%);
-  transition-duration: 0.2s;
-  background-color: white;
-}
-
-.gst-toggle-input:checked + .toggleSwitch {
-  background-color: rgb(148, 118, 255);
-  transition-duration: 0.2s;
-}
-
-.gst-toggle-input:disabled + .toggleSwitch {
-  cursor: not-allowed;
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.25) 0%,
-    rgba(0, 0, 0, 0.05) 35%,
-    rgba(0, 0, 0, 0.05) 60%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-}
-
-.content {
-  position: relative;
-  z-index: 1;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: clamp(96px, 20vh, 340px);
-  padding-inline: 16px;
-}
-
-.search-bar {
-  width: min(90vw, 584px);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 0 12px 0 20px;
-  height: 46px;
-  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
-  transition: box-shadow 0.2s ease;
-}
-
-.search-bar:focus-within {
-  box-shadow: 0 2px 10px rgba(32, 33, 36, 0.4);
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 16px;
-  color: #202124;
-  min-width: 0;
-  height: 100%;
-}
-
-.search-input::placeholder {
-  color: #80868b;
-}
-
-.icon-btn {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-}
-
-.icon-btn:hover,
-.icon-btn:focus-visible {
-  background: rgba(32, 33, 36, 0.08);
-}
-
-.clear-btn {
-  color: #5f6368;
-}
-
-.search-icon-btn {
-  color: #4285f4;
-}
-
-.search-icon-btn:hover,
-.search-icon-btn:focus-visible {
-  background: rgba(66, 133, 244, 0.1);
-}
-
-.link-panel {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  width: min(92vw, 900px);
-  margin: 48px auto 64px;
-}
-
 .figma-logo {
-  width: 88px;
+  width: 78px;
   height: auto;
   flex-shrink: 0;
+  margin-bottom: 12px;
 }
 
-.link-grid {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 18px;
+.sidebar-nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .link-btn {
@@ -226,13 +45,13 @@
   border-radius: 0;
   box-shadow: 4px 4px 0 #000000;
   font-family: 'Integral CF Demibold', Arial, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   text-decoration: none;
   text-align: center;
-  padding: 16px 12px;
+  padding: 14px 10px;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
@@ -259,69 +78,280 @@
   font-family: 'Alessandro Signature', cursive;
   text-transform: none;
   font-weight: 400;
-  font-size: 26px;
+  font-size: 22px;
   letter-spacing: 0;
 }
 
-.sheet-panel {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  width: min(92vw, 900px);
-  margin: 0 auto 64px;
-}
+/* Main content */
 
-.spreadsheet-logo {
-  width: 88px;
-  height: auto;
-  flex-shrink: 0;
-}
-
-.sheet-grid {
+.main-content {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 18px;
-}
-
-.sheet-btn {
+  min-width: 0;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  aspect-ratio: 1 / 1;
-  min-width: 0;
-  background: #ffffff;
-  border: 3px solid #000000;
-  box-shadow: 4px 4px 0 #000000;
-  padding: 12px 6px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.15s ease;
+  gap: 28px;
+  padding: 36px 0 48px;
 }
 
-.sheet-btn:hover,
-.sheet-btn:focus-visible {
-  transform: translateY(-0.33em);
+.brand-header {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.sheet-btn:active {
-  transform: translateY(0);
-}
-
-.sheet-icon {
-  width: 58%;
+.brand-logo {
+  width: min(90%, 478px);
   height: auto;
 }
 
-.sheet-label {
+.search-bar {
+  width: 100%;
+  max-width: 498px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #d5d5d5;
+  border-radius: 40px;
+  padding: 0 12px 0 20px;
+  height: 50px;
+  transition: border-color 0.2s ease;
+}
+
+.search-bar:focus-within {
+  border-color: #9aa0a6;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: #202124;
+  min-width: 0;
+  height: 100%;
+}
+
+.search-input::placeholder {
+  color: #9aa0a6;
+}
+
+.icon-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  background: rgba(32, 33, 36, 0.08);
+}
+
+.clear-btn {
+  color: #9aa0a6;
+}
+
+.search-icon-btn {
+  color: #5f6368;
+}
+
+.quick-icons-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.quick-icon-link {
+  display: flex;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.quick-icon-link:hover,
+.quick-icon-link:focus-visible {
+  transform: translateY(-3px);
+  opacity: 0.85;
+}
+
+.quick-icon-img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+/* Goal of the month card */
+
+.goal-card {
+  width: 100%;
+  max-width: 1228px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #303841;
+  border-radius: 0;
+  padding: 0px 32px;
+  height: 316px;
+}
+
+.goal-label-wrap {
+  flex-shrink: 0;
+  width: 84px;
+  height: 162px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.goal-label {
+  transform: rotate(-90deg);
+  font-family: 'NJ Naruto', cursive;
+  color: #ff5722;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 42px;
+  letter-spacing: 1px;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.goal-item {
+  position: relative;
+  width: 197px;
+  height: 198px;
+  flex-shrink: 0;
+}
+
+.goal-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  overflow: hidden;
+  object-fit: cover;
+  display: block;
+}
+
+.goal-caption {
+  position: absolute;
+  top: -5.25px;
+  left: -36px;
+  font-family: 'NJ Naruto', cursive;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 32px;
+  -webkit-text-stroke: 1.5px #303841;
+  transform: rotate(-12.11deg);
+  transform-origin: left center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.goal-name-img {
+  position: absolute;
+  right: -5px;
+  bottom: -20px;
+  height: auto;
+  width: auto;
+  pointer-events: none;
+}
+.goal-name-ptah {
+  height: 70px !important;
+  width: 24px !important;
+  bottom: 15px !important;
+  right: 4px !important;
+}
+.goal-name-ra {
+  height: 50px !important;
+  width: 24px !important;
+  bottom: 15px !important;
+  right: 4px !important;
+}
+.goal-name-khonsu {
+  height: 130px !important;
+  width: 24px !important;
+  bottom: 15px !important;
+  right: 4px !important;
+}
+/* Content grid: sheets/notion row + openai/next-stall row, columns aligned */
+
+.content-grid {
+  width: 85%;
+  max-width: 1228px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 24px;
+}
+
+.sheet-card {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  min-width: 0;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-card-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-content: center;
+  row-gap: 28px;
+  column-gap: 20px;
+}
+
+.sheet-mini-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sheet-mini-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #000000;
+  flex-shrink: 0;
+}
+
+.sheet-mini-icon {
+  width: 40px;
+  height: auto;
+}
+
+.sheet-mini-label {
   font-family: 'Montserrat ExtraLight', Arial, sans-serif;
   font-style: normal;
   font-weight: 200;
-  font-size: 12px;
+  font-size: 11px;
   color: #202124;
   text-transform: uppercase;
   letter-spacing: 0.2px;
@@ -332,57 +362,41 @@
   max-width: 100%;
 }
 
-.apps-panel {
-  position: relative;
-  z-index: 1;
+.sheet-card-logo-cell {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
-  gap: 24px;
-  width: min(92vw, 900px);
-  margin: 0 auto 64px;
+  justify-content: center;
+  height: 70px;
 }
 
-.notion-card {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background: #ffffff;
-  border: 3px solid #000000;
-  border-radius: 24px;
-  box-shadow: 4px 4px 0 #000000;
-  padding: 20px 28px;
-  flex-shrink: 0;
+.sheet-card-logo {
+  width: 56px;
+  height: auto;
 }
 
-.apps-icon-row {
-  flex: 1;
+.notion-calendar-card {
+  grid-column: 2;
+  grid-row: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 32px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 24px;
+  padding: 20px 24px;
+}
+
+.notion-card-body {
   display: flex;
   align-items: center;
   gap: 16px;
-}
-
-.apps-icon-row .button-container,
-.apps-icon-row .app-icon-link {
-  flex: 1;
   min-width: 0;
-  width: auto;
-  height: auto;
-  aspect-ratio: 1 / 1;
-}
-
-.apps-icon-row .button-container {
-  gap: 0;
-}
-
-.apps-icon-row .button-container .brutalist-button {
-  width: 100%;
-  height: 100%;
 }
 
 .notion-card-logo {
-  width: 84px;
+  width: 90px;
   height: auto;
   flex-shrink: 0;
 }
@@ -399,7 +413,7 @@
 .notion-list-link {
   color: #000000;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   text-decoration: none;
   cursor: pointer;
 }
@@ -413,8 +427,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 142px;
-  height: 142px;
+  width: 68px;
+  height: 68px;
   flex-shrink: 0;
   transition:
     transform 0.2s ease,
@@ -430,14 +444,55 @@
 .app-icon-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+}
+
+.bottom-row {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.next-stall-card {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 24px;
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.next-stall-label {
+  font-size: 13px;
+  color: #555555;
+  text-align: center;
+  font-weight: 700;
+}
+
+.next-stall-date {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111111;
+  text-align: center;
 }
 
 /* Uiverse.io by 0xnihilism - OpenAI brutalist button */
 .button-container {
+  flex-shrink: 0;
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.button-container .brutalist-button {
+  width: 120px;
+  height: 120px;
 }
 
 .brutalist-button {
@@ -600,90 +655,297 @@
   transform: scale(0.95);
 }
 
-@media (max-width: 900px) {
-  .link-panel {
+/* Right sidebar */
+
+.sidebar-right {
+  width: 230px;
+  flex-shrink: 0;
+  min-height: 100dvh;
+  background: #f2f2f2;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.stats-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-family: 'Montserrat SemiBold', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #555555;
+}
+
+.stat-value {
+  font-family: 'Montserrat SemiBold', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  color: #111111;
+  cursor: pointer;
+}
+
+.stat-saving {
+  font-size: 14px;
+  color: #888888;
+}
+
+.stat-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-value-input {
+  width: 90px;
+  font-family: 'Montserrat SemiBold', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #111111;
+  border: none;
+  border-bottom: 2px solid #111111;
+  outline: none;
+  background: transparent;
+  padding: 2px 0;
+}
+
+.stat-confirm-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: #1a9c5c;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.stat-confirm-btn:hover,
+.stat-confirm-btn:focus-visible {
+  background: #147a48;
+}
+
+.stat-error {
+  font-size: 11px;
+  color: #c0392b;
+  text-align: center;
+  max-width: 160px;
+}
+
+.stalls-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border: 2px solid #000000;
+  border-radius: 16px;
+  padding: 18px 14px;
+}
+
+.stalls-title {
+  font-weight: 800;
+  font-size: 14px;
+  color: #111111;
+}
+
+.stall-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stall-date {
+  font-weight: 800;
+  font-size: 15px;
+  color: #111111;
+}
+
+.stall-place {
+  font-size: 11px;
+  color: #888888;
+}
+
+.gst-widget {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gst-logo {
+  width: 70px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.gst-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gst-month {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111111;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.gst-toggles {
+  display: flex;
+  gap: 14px;
+}
+
+.gst-toggle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.gst-toggle-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #111111;
+  white-space: nowrap;
+}
+
+/* Uiverse.io by vinodjangid07 - toggle switch */
+.gst-toggle-input {
+  display: none;
+}
+
+.gst-toggle-item .toggleSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 42px;
+  height: 26px;
+  background-color: rgb(82, 82, 82);
+  border-radius: 20px;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.gst-toggle-item .toggleSwitch::after {
+  content: '';
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  left: 5px;
+  background-color: transparent;
+  border-radius: 50%;
+  transition-duration: 0.2s;
+  box-shadow: 5px 2px 7px rgba(8, 8, 8, 0.26);
+  border: 4px solid white;
+}
+
+.gst-toggle-input:checked + .toggleSwitch::after {
+  transform: translateX(100%);
+  transition-duration: 0.2s;
+  background-color: white;
+}
+
+.gst-toggle-input:checked + .toggleSwitch {
+  background-color: rgb(148, 118, 255);
+  transition-duration: 0.2s;
+}
+
+.gst-toggle-input:disabled + .toggleSwitch {
+  cursor: not-allowed;
+}
+
+/* Responsive */
+
+@media (max-width: 1024px) {
+  .dashboard {
     flex-direction: column;
-    gap: 20px;
   }
 
-  .link-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .sidebar-left,
+  .sidebar-right {
     width: 100%;
+    min-height: 0;
   }
 
-  .sheet-panel {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .sheet-grid {
-    grid-template-columns: repeat(4, 1fr);
-    width: 100%;
-  }
-
-  .apps-panel {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .apps-icon-row {
+  .sidebar-nav {
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .apps-icon-row .button-container,
-  .apps-icon-row .app-icon-link {
-    flex: 0 0 110px;
-    width: 110px;
-    height: 110px;
-    aspect-ratio: auto;
+  .sidebar-nav .link-btn {
+    width: auto;
+    flex: 1 1 140px;
+  }
+
+  .stats-block {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .goal-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .goal-label {
+    transform: none;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet-card,
+  .notion-calendar-card,
+  .bottom-row {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .bottom-row {
+    flex-direction: column;
+  }
+
+  .button-container {
+    justify-content: center;
+    margin: 0 auto;
   }
 }
 
 @media (max-width: 600px) {
-  .content {
-    padding-top: clamp(72px, 22vh, 220px);
-  }
-
-  .gst-widget {
-    gap: 8px;
-  }
-
-  .gst-logo {
-    width: 84px;
-  }
-
-  .gst-month {
-    font-size: 15px;
-  }
-
-  .gst-info {
-    gap: 6px;
-  }
-
-  .gst-toggles {
-    gap: 12px;
-  }
-
-  .gst-toggle-label {
-    font-size: 10px;
-  }
-
-  .gst-toggle-item .toggleSwitch {
-    width: 36px;
-    height: 22px;
-  }
-
-  .gst-toggle-item .toggleSwitch::after {
-    height: 7px;
-    width: 7px;
-    border-width: 4px;
+  .main-content {
+    padding: 24px 16px 36px;
   }
 
   .search-bar {
-    width: 92vw;
     height: 48px;
-    padding: 0 6px 0 16px;
   }
 
   .search-input {
@@ -697,47 +959,51 @@
 
   .link-btn {
     font-size: 13px;
-    padding: 16px 8px;
+    padding: 14px 8px;
     box-shadow: 4px 4px 0 #000;
     border-width: 2px;
   }
 
   .link-btn.signature-btn {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .figma-logo {
     width: 64px;
   }
 
-  .sheet-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+  .sheet-card-grid {
+    gap: 12px 8px;
   }
 
-  .sheet-btn {
-    box-shadow: 4px 4px 0 #000;
-    border-width: 2px;
-    padding: 10px 4px;
+  .sheet-mini-badge {
+    width: 52px;
+    height: 52px;
   }
 
-  .sheet-label {
-    font-size: 10px;
+  .sheet-mini-icon {
+    width: 30px;
   }
 
-  .spreadsheet-logo {
-    width: 56px;
+  .sheet-card-logo-cell {
+    height: 52px;
   }
 
-  .apps-panel {
-    gap: 20px;
+  .sheet-card-logo {
+    width: 40px;
   }
 
-  .notion-card {
-    padding: 14px 18px;
-    gap: 14px;
-    border-width: 2px;
-    box-shadow: 4px 4px 0 #000;
+  .sheet-mini-label {
+    font-size: 9px;
+  }
+
+  .notion-calendar-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .notion-card-body {
+    padding: 14px 0 0;
   }
 
   .notion-card-logo {
@@ -746,16 +1012,5 @@
 
   .notion-list-link {
     font-size: 12px;
-  }
-
-  .apps-icon-row {
-    gap: 12px;
-  }
-
-  .apps-icon-row .button-container,
-  .apps-icon-row .app-icon-link {
-    flex: 0 0 84px;
-    width: 84px;
-    height: 84px;
   }
 }

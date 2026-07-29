@@ -22,6 +22,22 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Montserrat SemiBold';
+  src: url('/fonts/montserrat.semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NJ Naruto';
+  src: url('/fonts/njnaruto.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
