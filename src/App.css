@@ -74,6 +74,10 @@
   transform: translateY(0);
 }
 
+.link-btn .plain-glyph {
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
+
 .link-btn.signature-btn {
   font-family: 'Alessandro Signature', cursive;
   text-transform: none;

@@ -31,6 +31,17 @@ const commitDashboardFile = async (file, data) => {
   if (!res.ok) throw new Error('Request failed')
 }
 
+const renderLabel = (label) =>
+  label.split(/(')/).map((part, i) =>
+    part === "'" ? (
+      <span className="plain-glyph" key={i}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  )
+
 function TickIcon() {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
@@ -52,20 +63,20 @@ const LINKS = [
     href: 'https://www.figma.com/files/team/1656159504782565874/drafts?fuid=1507998343150900536',
   },
   {
-    label: 'Branding',
-    href: 'https://www.figma.com/files/team/1655816611632182467/drafts?fuid=1507998343150900536',
-  },
-  {
-    label: 'Minoids',
-    href: 'https://www.figma.com/files/team/1655837562755055567/drafts?fuid=1507998343150900536',
+    label: 'Unedited',
+    href: 'https://www.figma.com/files/team/1656204574950086248/drafts?fuid=1507998343150900536',
   },
   {
     label: 'Posters',
     href: 'https://www.figma.com/files/team/1655838889265396225/drafts?fuid=1507998343150900536',
   },
   {
-    label: 'Unedited',
-    href: 'https://www.figma.com/files/team/1656204574950086248/drafts?fuid=1507998343150900536',
+    label: 'Branding',
+    href: 'https://www.figma.com/files/team/1655816611632182467/drafts?fuid=1507998343150900536',
+  },
+  {
+    label: 'Minoids',
+    href: 'https://www.figma.com/files/team/1655837562755055567/drafts?fuid=1507998343150900536',
   },
   {
     label: 'Coloring',
@@ -339,11 +350,11 @@ function App() {
             const className = `link-btn${link.signature ? ' signature-btn' : ''}`
             return link.href ? (
               <a key={link.label} href={link.href} rel="noopener noreferrer" className={className}>
-                {link.label}
+                {renderLabel(link.label)}
               </a>
             ) : (
               <button key={link.label} type="button" className={className}>
-                {link.label}
+                {renderLabel(link.label)}
               </button>
             )
           })}
