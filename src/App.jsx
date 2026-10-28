@@ -135,7 +135,8 @@ const SHEETS = [
   },
 ]
 
-const NOTION_LOGO_URL = 'https://app.notion.com/'
+const NOTION_LOGO_URL =
+  'https://app.notion.com/p/Papyri-407292e05a4881fb8d74feaf6ce9d2b6?t=407292e05a4880fd8d9700a9a9685a43'
 
 const NOTION_LINKS = [
   {
