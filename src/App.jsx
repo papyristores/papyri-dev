@@ -55,6 +55,10 @@ const FIGMA_TEAM_URL =
 
 const LINKS = [
   {
+    label: 'Papyri',
+    href: 'https://www.figma.com/files/team/1696537893185381111/drafts?fuid=1507998343150900536',
+  },
+  {
     label: 'Polaroids',
     href: 'https://www.figma.com/files/team/1655813091897424519/drafts?fuid=1507998343150900536',
   },
